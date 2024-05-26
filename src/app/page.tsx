@@ -1,6 +1,6 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
@@ -15,7 +15,9 @@ export default function Home() {
           priority
         />
       </div>
-      <Button onClick={() => console.log('flhsahfgjlk')}>Click me</Button>
+      <Button onClick={() => console.log('flkdjaskfjd')} variant="secondary">
+        Click me
+      </Button>
     </main>
   );
 }
