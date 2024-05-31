@@ -17,38 +17,25 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Link } from '@radix-ui/react-navigation-menu';
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
-import { ShuffledFood } from './api/menu/route';
+import { getFood } from './actions/getFood';
+import { Prisma } from '@prisma/client';
+import { recreateDB } from './actions/recreateDb';
+
+type Food = Prisma.PromiseReturnType<typeof getFood>;
 
 export default function Home() {
-  const [food, setFood] = React.useState<ShuffledFood | null>();
+  const [food, setFood] = React.useState<Food>();
 
-  const updatePicardDb = () => {
-    const updatePicardDb = async () => {
-      const response = await fetch('/api/menu/update', {
-        method: 'GET',
-      });
-      return response.json();
-    };
-    updatePicardDb();
-  };
-
-  const shuffleFood = () => {
-    const suffleFoodFromDb = async () => {
-      const response = await fetch('/api/menu', {
-        method: 'GET',
-      });
-      return response.json();
-    };
-    suffleFoodFromDb().then((data) => {
-      setFood(data);
-    });
+  const getFoodAction = async () => {
+    const data = await getFood();
+    setFood(data);
   };
 
   return (
     <>
       <Button
         className="absolute up-0 left-0"
-        onClick={updatePicardDb}
+        onClick={() => recreateDB()}
         variant="secondary"
       >
         RECREATE DB
@@ -85,21 +72,18 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Image
-                src={food.image}
-                alt={food.image}
+                src={food.image || ''}
+                alt={food.image || ''}
                 width="0"
                 height="0"
                 sizes="100vw"
                 className="w-80 h-auto"
               />
             </CardContent>
-            {/* <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter> */}
           </Card>
         )}
 
-        <Button onClick={shuffleFood} variant="secondary">
+        <Button onClick={getFoodAction} variant="secondary">
           SHUFFLE FOOD
         </Button>
       </main>

@@ -1,8 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-// import fs from 'fs';
 
-export const scrapPicard = async () => {
+export const scrapPicard = async (constumersId: string) => {
   const response = await axios.get(
     'https://www.picard.fr/rayons/plats-cuisines/types-de-plats-cuisines?prefn1=format&prefv1=1-part&sz=140',
   );
@@ -29,7 +28,7 @@ export const scrapPicard = async () => {
       const image = $(
         '#pdpMain > div > div.pi-ProductPage-top > div.pi-ProductPage-medias > div.pi-ProductImage > img',
       ).attr('src');
-      return { name, kcal: parseInt(kcal), image, link };
+      return { name, kcal: parseInt(kcal), image, link, constumersId };
     }),
   );
 
