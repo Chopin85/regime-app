@@ -15,7 +15,8 @@ export const scrapPicard = async (constumersId: string) => {
 
   const fetchInfos = await Promise.all(
     links.map(async (link) => {
-      const response = await axios.get(`https://www.picard.fr${link}`);
+      const url = `https://www.picard.fr${link}`;
+      const response = await axios.get(url);
       const html = response.data;
       const $ = cheerio.load(html);
       const kcal = $(
@@ -28,7 +29,13 @@ export const scrapPicard = async (constumersId: string) => {
       const image = $(
         '#pdpMain > div > div.pi-ProductPage-top > div.pi-ProductPage-medias > div.pi-ProductImage > img',
       ).attr('src');
-      return { name, kcal: parseInt(kcal), image, link, constumersId };
+      return {
+        name,
+        kcal: parseInt(kcal),
+        image,
+        url,
+        constumersId,
+      };
     }),
   );
 

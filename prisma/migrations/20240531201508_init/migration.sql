@@ -4,7 +4,7 @@ CREATE TABLE "Food" (
     "name" TEXT NOT NULL,
     "kcal" INTEGER NOT NULL,
     "image" TEXT,
-    "link" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
     "constumersId" TEXT NOT NULL,
 
     CONSTRAINT "Food_pkey" PRIMARY KEY ("id")

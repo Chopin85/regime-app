@@ -13,7 +13,7 @@ model Food {
   name         String
   kcal         Int
   image        String?
-  link         String
+  url          String
   Constumers   Constumers @relation(fields: [constumersId], references: [id])
   constumersId String
 }

@@ -1,12 +1,19 @@
 'use server';
 import db from '@/lib/prisma';
-export const getFood = async () => {
+
+export const getFood = async ({
+  kcalMin,
+  kcalMax,
+}: {
+  kcalMin: number;
+  kcalMax: number;
+}) => {
   try {
     const shuffledFood = await db.food.findMany({
       where: {
         kcal: {
-          lte: 900,
-          gte: 50,
+          lte: kcalMax,
+          gte: kcalMin,
         },
       },
     });
