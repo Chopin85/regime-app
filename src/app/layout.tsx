@@ -1,14 +1,20 @@
-import { Poppins as FontSans } from 'next/font/google';
+import localFont from 'next/font/local';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
+import Navbar from '@/components/navbar';
+import { TailwindIndicator } from '@/components/TailwindIndicator';
 
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+const sofiaPro = localFont({
+  src: [
+    {
+      path: '../../public/fonts/SofiaProRegular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-sofiaPro',
 });
 
 export default function RootLayout({
@@ -20,8 +26,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'bg-background min-h-screen font-sans antialiased',
-          fontSans.variable,
+          'bg-background min-h-screen font-sofia antialiased',
+          sofiaPro.variable,
         )}
         suppressHydrationWarning={true}
       >
@@ -31,7 +37,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navbar />
+
           {children}
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>
