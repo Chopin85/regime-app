@@ -20,7 +20,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sofia: ['var(--font-sofiaPro)'],
+        poppins: ['var(--font-poppins)', ...fontFamily.mono],
       },
       colors: {
         border: 'hsl(var(--border))',

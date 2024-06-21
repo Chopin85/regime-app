@@ -1,0 +1,84 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Deploy 🚀 CI
+
+on:
+  push:
+    branches: ['main']
+  # pull_request:
+  #   branches: [ "main" ]
+  # Manual workflow
+  workflow_dispatch:
+
+jobs:
+  build_publish:
+    name: 🏗️ Build & 📰 Publish Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: registry-server.pcatalani.com
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build & Publish
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: registry-server.pcatalani.com/regime-app:latest
+          file: prod.Dockerfile
+  deploy:
+    name: 🚀 Deploy New Version
+    needs: build_publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: SFTP Deploy docker-compose.yml
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+
+        with:
+          # username
+          username: ${{ secrets.SSH_USERNAME }}
+          # your sftp server
+          server: ${{ secrets.SSH_HOST }}
+          # your sftp server port, default to 22
+          port: ${{ secrets.SSH_PORT }}
+          # you can copy private_key from your *.pem file, keep format
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # will put all file under this path
+          local_path: 'docker-compose.yml'
+          # files will copy to under remote_path
+          # dossier app nodeapp
+          remote_path: ${{ secrets.SSH_APP_PATH }}
+          # connection via sftp protocol only
+          sftp_only: # optional
+          # sftp args
+          sftpArgs: # optional
+          # This operation will delete all files in the remote path before upload. Please be careful set this to true
+          delete_remote_files: # optional
+          # SSH passsword，If a password is set, the secret key pair is ignored
+          # password: ${{ secrets.SSH_PASSWORD }}
+
+      - name: SSH Connection to Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.SSH_APP_PATH }}
+            echo ${{ secrets.REGISTRY_PASSWORD }} | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin registry-server.pcatalani.com
+            docker pull registry-server.pcatalani.com/regime-app:latest
+            docker-compose up -d prod
+            docker image prune -f

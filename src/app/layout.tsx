@@ -1,21 +1,26 @@
-import localFont from 'next/font/local';
+import { Poppins } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/navbar';
 import { TailwindIndicator } from '@/components/TailwindIndicator';
+import { Metadata } from 'next';
 
-const sofiaPro = localFont({
-  src: [
-    {
-      path: '../../public/fonts/SofiaProRegular.woff',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-sofiaPro',
+const poppins = Poppins({
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+  weight: ['100', '200', '300', '400', '500', '600', '700'],
 });
+
+export const metadata: Metadata = {
+  title: 'Regime app',
+  description: 'Diet app',
+  icons: {
+    icon: 'images/favicon.png',
+  },
+};
 
 export default function RootLayout({
   children,
@@ -26,8 +31,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'bg-background min-h-screen font-sofia antialiased',
-          sofiaPro.variable,
+          'bg-background min-h-screen font-poppins antialiased',
+          poppins.variable,
         )}
         suppressHydrationWarning={true}
       >
@@ -38,8 +43,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-
-          {children}
+          <main className="h-screen pt-20">{children}</main>
           <TailwindIndicator />
         </ThemeProvider>
       </body>

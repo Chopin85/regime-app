@@ -22,19 +22,21 @@ services:
 
   prod:
     container_name: regime-app
-    build:
-      context: .
-      dockerfile: prod.Dockerfile
+    image: registry-server.pcatalani.com/regime-app:latest
+    # build:
+    #   context: .
+    #   dockerfile: prod.Dockerfile
     env_file:
       - .env
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
     restart: always
     ports:
       - 3000:3000
     networks:
       - my_network
+      - nginx
     depends_on:
       postgres:
         condition: service_healthy
@@ -87,3 +89,6 @@ volumes:
 networks:
   my_network:
     driver: bridge
+  nginx:
+    name: nginx_network
+    external: true

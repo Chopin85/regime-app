@@ -92,7 +92,6 @@ export default function Home() {
             <CardFooter className="flex justify-between">
               <Button
                 className="w-full"
-                variant="outline"
                 onClick={() => window.open(food.url, '_blank')}
               >
                 BUY
