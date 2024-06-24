@@ -1,9 +1,11 @@
 import { Poppins } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/Navbar';
 import { TailwindIndicator } from '@/components/TailwindIndicator';
 import { Metadata } from 'next';
 
@@ -22,13 +24,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: string };
 }>) {
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           'bg-background min-h-screen font-poppins antialiased',
@@ -36,16 +42,18 @@ export default function RootLayout({
         )}
         suppressHydrationWarning={true}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main className="h-screen pt-20">{children}</main>
-          <TailwindIndicator />
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className="h-screen pt-20">{children}</main>
+            <TailwindIndicator />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

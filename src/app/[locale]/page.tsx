@@ -1,14 +1,17 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import buildingImg from '../../public/images/image.jpg';
+import buildingImg from '../../../public/images/image.jpg';
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
+  const t = useTranslations('Index');
+
   return (
     <>
       <div className="h-full flex flex-col justify-center items-center">
         <h1 className="scroll-m-20 text-4xl tracking-tight lg:text-5xl font-bold text-center mb-8">
-          Welcome to Your Health Journey!
+          {t('title')}
         </h1>
         <h3 className="text-primary px-20 text-center">
           At Regime app, were dedicated to helping you achieve your health and
