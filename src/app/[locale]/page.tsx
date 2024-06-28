@@ -20,6 +20,17 @@ export default function Home() {
           a health condition, or simply eat healthier.
         </h3>
       </div>
+      <div className="flex justify-center items-center gap-4 max-md:flex-col container mb-5">
+        <div className="size-full h-20 bg-red-500 flex justify-center items-center">
+          <span>BOX 1</span>
+        </div>
+        <div className="size-full h-20 bg-red-500 flex justify-center items-center">
+          <span>BOX 2</span>
+        </div>
+        <div className="size-full h-20 bg-red-500 flex justify-center items-center">
+          <span>BOX 3</span>
+        </div>
+      </div>
       <div className="flex flex-col justify-center items-center bg-secondary">
         <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
           <div className="md:flex">

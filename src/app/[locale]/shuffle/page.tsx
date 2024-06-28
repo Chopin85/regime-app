@@ -10,9 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getFood } from '../../../actions/getFood';
+import { getFood } from '@/actions/getFood';
 import { Prisma } from '@prisma/client';
-import { recreateDB } from '../../../actions/recreateDb';
+import { recreateDB } from '@/actions/recreateDb';
 import { Input } from '@/components/ui/input';
 
 type Food = Prisma.PromiseReturnType<typeof getFood>;

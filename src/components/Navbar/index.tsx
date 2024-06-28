@@ -1,21 +1,29 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
-import { Menu } from 'lucide-react';
+import { Link, usePathname } from '@/lib/navigations';
+import { Menu, Moon, Sun } from 'lucide-react';
 import { IoFastFood } from 'react-icons/io5';
-import { Button } from '../ui/button';
-import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useTheme } from 'next-themes';
+import { LanguageSelector } from '../LanguagesSelector';
 
 export default function Navbar() {
   const [state, setState] = React.useState(false);
   const path = usePathname();
+  const { setTheme } = useTheme();
 
   const menus = [
     { title: 'Shuffle', path: '/shuffle' },
     { title: 'Dashboard', path: '/dashboard' },
-    { title: 'About Us', path: '/your-path' },
-    { title: 'Contact Us', path: '/your-path' },
+    { title: 'About Us', path: '/dashboard' },
+    { title: 'Contact Us', path: '/dashboard' },
   ];
 
   React.useEffect(() => {
@@ -59,6 +67,31 @@ export default function Navbar() {
                 </Button>
               </li>
             ))}
+            <li>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <span className="sr-only">Toggle theme</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setTheme('light')}>
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme('dark')}>
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme('system')}>
+                    System
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </li>
+            <li>
+              <LanguageSelector />
+            </li>
           </ul>
         </div>
       </div>
