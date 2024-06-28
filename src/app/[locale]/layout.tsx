@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
+import PlausibleProvider from 'next-plausible';
 
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
@@ -35,6 +36,13 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <PlausibleProvider
+          domain="regime-app.pcatalani.com"
+          customDomain="https://analytics.pcatalani.com"
+          selfHosted
+        />
+      </head>
       <body
         className={cn(
           'bg-background min-h-screen font-poppins antialiased',
